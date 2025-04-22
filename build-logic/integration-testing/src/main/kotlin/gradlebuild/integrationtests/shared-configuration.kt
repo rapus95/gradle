@@ -17,12 +17,12 @@
 package gradlebuild.integrationtests
 
 import gradlebuild.basics.capitalize
+import gradlebuild.basics.daemonDebuggingIsEnabled
+import gradlebuild.basics.launcherDebuggingIsEnabled
 import gradlebuild.basics.repoRoot
 import gradlebuild.basics.testSplitExcludeTestClasses
 import gradlebuild.basics.testSplitIncludeTestClasses
 import gradlebuild.basics.testSplitOnlyTestGradleVersion
-import gradlebuild.basics.daemonDebuggingIsEnabled
-import gradlebuild.basics.launcherDebuggingIsEnabled
 import gradlebuild.basics.testing.TestType
 import gradlebuild.integrationtests.extension.IntegrationTestExtension
 import gradlebuild.integrationtests.tasks.DistributionTest
@@ -131,7 +131,7 @@ fun Project.createTasks(sourceSet: SourceSet, testType: TestType) {
     }
     // Create a variant of the test suite to force realization of component metadata
     if (testType == TestType.INTEGRATION) {
-        createTestTask(prefix + "ForceRealizeTest", defaultExecuter, sourceSet, testType) {
+        createTestTask(prefix + "ForceRealizeTest", "forking", sourceSet, testType) {
             systemProperties["org.gradle.integtest.force.realize.metadata"] = "true"
         }
     }
