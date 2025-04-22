@@ -25,6 +25,8 @@ import org.gradle.test.preconditions.IntegTestPreconditions
 import org.gradle.test.preconditions.UnitTestPreconditions
 import org.gradle.tooling.GradleConnectionException
 import org.gradle.tooling.ProjectConnection
+import org.gradle.util.GradleVersion
+import org.junit.Assume
 import spock.lang.Issue
 import spock.util.Exceptions
 
@@ -44,6 +46,7 @@ class JavaVersionCrossVersionTest extends ToolingApiSpecification {
 
     @Requires([UnitTestPreconditions.Jdk11OrLater, IntegTestPreconditions.Java8HomeAvailable])
     def "can deserialize failures with post-jigsaw client and pre-jigsaw daemon"() {
+        Assume.assumeTrue("Gradle 9.0+ requires Java 17+ for the daemon", GradleVersion.version("9.0") < targetVersion.baseVersion)
         projectDir.file("gradle.properties").writeProperties("org.gradle.java.home": AvailableJavaHomes.jdk8.javaHome.absolutePath)
 
         when:
